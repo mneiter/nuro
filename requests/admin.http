@@ -1,0 +1,15 @@
+﻿### Login as admin
+# @name adminLogin
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "AdminPass123"
+}
+
+@adminToken = {{adminLogin.response.body.access_token}}
+
+### Fetch timer summary
+GET http://localhost:8000/api/admin/timers/summary
+Authorization: Bearer {{adminToken}}

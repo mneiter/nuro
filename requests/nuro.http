@@ -1,0 +1,44 @@
+﻿### Register a new user
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "demo@example.com",
+  "password": "ChangeMe123!"
+}
+
+### Login and capture access token
+# @name login
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo@example.com",
+  "password": "ChangeMe123!"
+}
+
+@token = {{login.response.body.access_token}}
+
+### Get profile
+GET http://localhost:8000/api/auth/me
+Authorization: Bearer {{token}}
+
+### Start a 25 minute pomodoro
+POST http://localhost:8000/api/timers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "label": "Deep Work",
+  "duration_seconds": 1500
+}
+
+@timerId = {{last.response.body.id}}
+
+### Fetch live tick (long poll with wait=false)
+GET http://localhost:8000/api/timers/{{timerId}}/tick?wait=false
+Authorization: Bearer {{token}}
+
+### Cancel the active timer
+POST http://localhost:8000/api/timers/{{timerId}}/cancel
+Authorization: Bearer {{token}}
